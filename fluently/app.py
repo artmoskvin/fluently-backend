@@ -6,6 +6,7 @@ from flask import abort, Flask, request, jsonify
 from langchain.chat_models import ChatOpenAI
 
 from fluently.completion import get_completion
+from fluently.improvement.openai_improver import OpenAIImprover
 from fluently.translation.openai_translator import OpenAITranslator
 
 load_dotenv()
@@ -13,7 +14,8 @@ load_dotenv()
 openai.api_key = os.environ.get('OPENAI_API_KEY')
 
 chat_llm = ChatOpenAI()
-openai_translator = OpenAITranslator(chat_llm)
+translator = OpenAITranslator(chat_llm)
+improver = OpenAIImprover(chat_llm)
 
 app = Flask(__name__)
 
@@ -48,7 +50,7 @@ def translate():
     if text:
         app.logger.info("Text: " + text)
         try:
-            translation = openai_translator.translate(text)
+            translation = translator.translate(text)
 
             app.logger.info("Translation: " + translation)
 
@@ -56,5 +58,26 @@ def translate():
         except Exception as e:
             app.logger.error(f"Translation failed: {e}", exc_info=True)
             abort(500, description="Translation failed")
+
+    abort(400, description="Text is empty")
+
+
+@app.route("/improve", methods=["POST"])
+def improve():
+    app.logger.info("Received improvement request")
+
+    text = request.json.get("text", None)
+
+    if text:
+        app.logger.info("Text: " + text)
+        try:
+            improvement = improver.improve(text)
+
+            app.logger.info("Improvement: " + improvement)
+
+            return jsonify({"improvement": improvement})
+        except Exception as e:
+            app.logger.error(f"Improvement failed: {e}", exc_info=True)
+            abort(500, description="Improvement failed")
 
     abort(400, description="Text is empty")
