@@ -11,4 +11,4 @@
 7. Make it default for the project `pyenv local fluently-be`
 8. Install dependencies `pip install -r requirements.txt`
 9. Run tests `pytest`
-10. Run server locally `flask --app fluently.app run`
+10. Run server locally `flask --app fluently run --debug`
