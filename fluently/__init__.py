@@ -24,7 +24,7 @@ def create_app(test_config=None):
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
 
-        chat_llm = ChatOpenAI()
+        chat_llm = ChatOpenAI(temperature=0)
 
         app.config['OPENAI_TRANSLATOR'] = OpenAITranslator(chat_llm)
         app.config['OPENAI_IMPROVER'] = OpenAIImprover(chat_llm)
