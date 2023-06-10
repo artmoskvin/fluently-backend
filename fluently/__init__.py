@@ -1,8 +1,10 @@
+import logging
 import os
 
 import openai
 from dotenv import load_dotenv
 from flask import Flask
+from flask_cors import CORS
 from langchain.chat_models import ChatOpenAI
 
 from fluently.completion import get_completion
@@ -11,11 +13,16 @@ from fluently.translation.openai_translator import OpenAITranslator
 
 
 def create_app(test_config=None):
+    logging.basicConfig(level=logging.INFO)
+
     load_dotenv()
 
     openai.api_key = os.environ.get('OPENAI_API_KEY')
 
     app = Flask(__name__, instance_relative_config=True)
+
+    CORS(app)
+
     app.config.from_mapping(
         SECRET_KEY=os.environ.get('SECRET_KEY', 'dev'),
     )
