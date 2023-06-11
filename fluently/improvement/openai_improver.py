@@ -8,7 +8,10 @@ from fluently.improvement.improver import Improver
 
 IMPROVEMENT_PROMPT = PromptTemplate(
     input_variables=["text"],
-    template="Improve writing: {text}",
+    template="""Improve writing for the text below. Don't provide any explanations. \
+Don't wrap the improved text in quotes.
+
+Text: {text}""",
 )
 
 logger = logging.getLogger(__name__)
