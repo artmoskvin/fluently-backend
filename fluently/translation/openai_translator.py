@@ -8,7 +8,11 @@ from fluently.translation.translator import Translator
 
 TRANSLATION_PROMPT = PromptTemplate(
     input_variables=["text"],
-    template="Translate into English: {text}",
+    template="""Translate the text below into English. Don't provide any explanations. \
+Don't wrap the translated text in quotes.
+ 
+Text: {text}
+Translation:""",
 )
 
 logger = logging.getLogger(__name__)
